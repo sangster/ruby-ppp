@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "ppp"
 
   s.require_paths = ["lib", "ext"]
-  s.files         = %w{ lib/ppp.rb lib/ppp/version.rb lib/ppp/generator.rb ext/ppp/Cppp.so }
+  s.files         = %w{ LICENSE lib/ppp.rb lib/ppp/version.rb lib/ppp/generator.rb ext/ppp/Cppp.so }
   #s.files         = `git ls-files`.split("\n")
   #s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   #s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
