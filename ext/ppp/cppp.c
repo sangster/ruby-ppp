@@ -67,29 +67,13 @@ static VALUE t_get_passcodes( VALUE self, VALUE v_key, VALUE v_offset, VALUE v_c
     VALUE arr = rb_ary_new();
 
     int i;
-    for( i=0; i<count; ++i)
+    for( i = 0; i < count; ++i )
     {
-        rb_ary_push( arr, rb_str_new(pcl, length) );
+        rb_ary_push( arr, rb_str_new( pcl, length ) );
         pcl += length + 1;
     }
 
-/*
-    while( *pcl != 0 )
-    {
-        while( *pcl != 0 )
-        {
-            printf( "%c", *pcl );
-            ++pcl;
-        }
-        printf( " " );
-        ++pcl;
-    }
-*/
-
     free( to_free );
-
-    /*printf( "\n" );*/
-
 
     return arr;
 }
