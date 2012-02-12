@@ -2,9 +2,11 @@ require 'ppp/Cppp'
 
 class Ppp::Client
   @@HEX_PATTERN = /[a-fA-F0-9]{64}/
-  @@PPPV2_ALPHABET = "!#%+23456789=:?@ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+  @@ALPHABETS   = { :conservative => '!#%+23456789:=?@ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
+                    :aggressive   => '!"#$%&\'()*+,-./23456789:;<=>?@ABCDEFGHJKLMNOPRSTUVWXYZ[\]^_abcdefghijkmnopqrstuvwxyz{|}~' }
 
-  def initialize sha256_key, length=4, alphabet=@@PPPV2_ALPHABET
+
+  def initialize sha256_key, length=4, alphabet=@@ALPHABETS[:conservative]
     raise "Expected a 64 digit hex-string, got \"#{key}\"" if @@HEX_PATTERN.match( sha256_key ).nil?
 
     @key      = sha256_key
