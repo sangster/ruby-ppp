@@ -28,7 +28,13 @@ typedef struct __SequenceKey {
 
 #pragma pack(pop)
 
+#define KEY_BITS (int)256
+
+int ConvertHexToKey( char * hex, SequenceKey * key );
 void GenerateRandomSequenceKey( SequenceKey * sequenceKey );
+void GenerateSequenceKeyFromString( char * string, SequenceKey * sequenceKey );
+char * RetrievePasscodes( OneTwoEight firstPasscodeNumber, int passcodeCount, SequenceKey * sequenceKey,
+                          const char * sourceAlphabet, int passcodeLength );
 
 
 #ifdef __cplusplus
