@@ -34,5 +34,4 @@ static VALUE t_random_key( VALUE self )
     }
 
     return rb_str_new2( str );
-    return Qnil;
 }
