@@ -16,10 +16,27 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "ppp.h"
 #include "rijndael.h"
 #include "sha2.h"
 
+#pragma pack(push,1)
+
+typedef unsigned char Byte;
+typedef unsigned long long SixtyFour;
+
+typedef union __OneTwoEight {
+  struct {
+    SixtyFour low;
+    SixtyFour high;
+  } sixtyfour;
+  Byte byte[16];
+} OneTwoEight;
+
+typedef struct __SequenceKey {
+  Byte byte[SHA256_DIGEST_SIZE];
+} SequenceKey;
+
+#pragma pack(pop)
 
 // Increment by one a 128-bit unsigned integer
 
@@ -129,6 +146,9 @@ void GenerateRandomSequenceKey( SequenceKey * sequenceKey ) {
   struct timeval t;
   gettimeofday( &t, 0 );
 
+  char t_buffer[61];
+  strftime( t_buffer, 60, "%c%d%e%H%I%j%m", localtime( &t.tv_sec ) );
+
   char msecs_buffer[32];
   sprintf( msecs_buffer, "%ld", t.tv_usec );
 
@@ -144,7 +164,7 @@ void GenerateRandomSequenceKey( SequenceKey * sequenceKey ) {
   sprintf( loadavg_buffer, "%f%f%f", samples[0], samples[1], samples[2] );
 
   char buffer[1024];
-  sprintf( buffer, "%s-%s-%s-%s", msecs_buffer, hostname_buffer,
+  sprintf( buffer, "%s-%s-%s-%s-%s", t_buffer, msecs_buffer, hostname_buffer,
 	   pointer_buffer, loadavg_buffer );
 
   GenerateSequenceKeyFromString( buffer, sequenceKey );
