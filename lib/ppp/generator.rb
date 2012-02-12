@@ -11,7 +11,7 @@ class Ppp::Generator
   #   be comprised of. Cannot contain null characters and duplicate characters
   #   will be removed.
   def initialize sha256_key, length, alphabet
-    raise "Expected a 64 digit hex-string, got \"#{key}\"" if @@HEX_PATTERN.match( sha256_key ).nil?
+    raise "Expected a 64 digit hex-string, got \"#{sha256_key}\"" if @@HEX_PATTERN.match( sha256_key ).nil?
     raise "alphabet cannot contain null character" if alphabet.include? ?\0
 
     @seed     = sha256_key
