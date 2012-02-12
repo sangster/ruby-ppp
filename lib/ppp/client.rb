@@ -8,6 +8,7 @@ class Ppp::Client
 
   def initialize sha256_key, length=4, alphabet=@@ALPHABETS[:conservative]
     raise "Expected a 64 digit hex-string, got \"#{key}\"" if @@HEX_PATTERN.match( sha256_key ).nil?
+    raise "alphabet cannot contain null character" if alphabet.include? ?\0
 
     @key      = sha256_key
     @length   = length
