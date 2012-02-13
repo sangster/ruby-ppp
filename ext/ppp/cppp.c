@@ -19,7 +19,7 @@ void Init_Cppp()
 static VALUE key_to_string( SequenceKey * sequenceKey )
 {
     int i;
-    char str[ 70 ], pair[ 3 ];
+    char str[ 65 ], pair[ 3 ];
     bzero( str, sizeof(str) );
 
     for( i = 0; i < SHA256_DIGEST_SIZE; ++i )
