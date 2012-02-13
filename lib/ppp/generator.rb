@@ -11,8 +11,8 @@ class Ppp::Generator
   #   be comprised of. Cannot contain null characters and duplicate characters
   #   will be removed.
   def initialize sha256_key, length, alphabet
-    raise "Expected a 64 digit hex-string, got \"#{sha256_key}\"" if @@HEX_PATTERN.match( sha256_key ).nil?
-    raise "alphabet cannot contain null character" if alphabet.include? ?\0
+    raise NotHexKey.new( sha256_key ) if @@HEX_PATTERN.match( sha256_key ).nil?
+    raise ArgumentError.new( "alphabet cannot contain null character" ) if alphabet.include? ?\0
 
     @seed     = sha256_key
     @length   = length
@@ -39,5 +39,11 @@ class Ppp::Generator
   # @return [Boolean] if the given passcode matches the passcode at the given offset
   def verify index, given_passcode
     passcode( index ) == given_passcode
+  end
+
+  class NotHexKey < ArgumentError
+    @@error = 'Expected a 64 digit hex-string, but got "%s". Use Ppp.key_from_string() to generate a useable hex-string from an arbitrary string.'
+    def initialize( key ) @key = key     end
+    def to_s()            @@error % @key end
   end
 end
