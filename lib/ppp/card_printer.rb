@@ -2,6 +2,7 @@ require 'ppp/generator'
 
 class Ppp::CardPrinter
 
+  @@COLUMN_NAMES = ?A...?Z
   @@CHARS_PER_LINE = 34
   @@SIZES = {:creditcard => %w[ 85.60mm 53.98mm ]}
 
@@ -14,10 +15,17 @@ class Ppp::CardPrinter
     @font_size  = font_size
     @card_index = first_card_index
     @size       = process_size size
+    @offset     = 0
   end
 
   def passcodes_per_line
-    ( (@@CHARS_PER_LINE + 1) / (@generator.length + 1) ).to_i
+    ( (@@CHARS_PER_LINE) / (@generator.length + 1) ).to_i
+  end
+  
+  def next_code
+    code = @generator.passcode( @offset )
+    @offset += 1
+    code
   end
 
   def css
@@ -25,7 +33,7 @@ class Ppp::CardPrinter
       <style>
         .card, .card .title, .card .card_index, .card .codes, .card .codes li {
           font-family: monospace;
-          font-size: #{@font_size}pt;
+          font-size: 3.5mm;
         }
         .card {
           background-color: \#fff;
@@ -44,6 +52,19 @@ class Ppp::CardPrinter
         }
         .codes {
         }
+        .codes ol {
+          padding: 0;
+          margin: 0;
+          margin-left: 3em;
+          list-style-position: outside;
+        }
+        .codes .codes_heading {
+          margin-left: 3em;
+        }
+        .codes .codes_heading .codes_column {
+          text-align: center;
+          width: #{@generator.length}em;
+        }
       </style>
     ]
   end
@@ -56,8 +77,11 @@ class Ppp::CardPrinter
         <span class="card_index">#{@card_index}</span>
         </div>
         <div class="codes">
+          <div class="codes_heading">
+            #{ @@COLUMN_NAMES.first(passcodes_per_line).collect { |c| %[<span class="codes_column">#{c}</span>] }.join ?\n }
+          </div>
           <ol>
-            #{ (0..15).collect{ "<li>Hi.</li>" }.join(?\n) }
+            #{ (0..9).collect{ "<li>#{(0..passcodes_per_line).collect {next_code}.join(' ') }</li>" }.join(?\n) }
           </ol>
         </div>
       </div>
