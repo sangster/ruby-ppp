@@ -2,6 +2,7 @@ require 'digest'
 require "ppp/version"
 require "ppp/generator"
 require 'ppp/Cppp'
+require 'ppp/card_printer'
 
 module Ppp
   class << self

@@ -2,6 +2,9 @@ require 'ppp/Cppp'
 
 # Generates passcodes.
 class Ppp::Generator
+
+  attr_reader :seed, :length, :alphabet
+
   @@HEX_PATTERN = /[a-fA-F0-9]{64}/
 
   # @param [String] sha256_key a 64 hex-digit string representation of a
