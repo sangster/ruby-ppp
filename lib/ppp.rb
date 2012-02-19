@@ -27,8 +27,8 @@ module Ppp
 
     def printer style, ppp
       case style
-      when :html
-        return Card::Html.new ppp
+      when :html  then return Card::Html.new  ppp
+      when :plain then return Card::Plain.new ppp
       end
     end
   end

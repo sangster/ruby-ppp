@@ -97,12 +97,16 @@ class Ppp::Card::Html < Ppp::Card::Base
     ]
   end
 
-  protected
-  
+  def to_s
+    "#{css}\n\n#{html}"
+  end
+
+  protected # ----------------------------------------------
+
   def width
     @size[0]
   end
-  
+
   def height
     @size[1]
   end
@@ -115,7 +119,7 @@ class Ppp::Card::Html < Ppp::Card::Base
     when Array
       return [ size[0].to_s, size[1].to_s ]
     else
-      raise ArgumentError.new( "Size must be a Symbol or Array" )
+    raise ArgumentError.new( "Size must be a Symbol or Array" )
     end
   end
 end
