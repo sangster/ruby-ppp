@@ -1,49 +1,14 @@
 require 'ppp/generator'
+require 'ppp/card/base'
 
-class Ppp::CardPrinter
-
-  @@FIRST_COLUMN = ?A
-  @@CHARS_PER_LINE = 34
+class Ppp::Card::Html < Ppp::Card::Base
   @@SIZES = {:creditcard => %w[ 85.60mm 53.98mm ]}
-  @@ROW_COL_PATTERN = /[[:digit:]][[:alpha:]]/
-
-  @@ERROR_BAD_ROW_COL = %[Expected a string with exactly one digit and one letter, got "%s".]
-  @@ERROR_LONG_CODES  = %[Passcodes longer than 16 characters are too long for printing]
 
   def initialize generator, card_title="PPP Passcard", font_size=14, first_card_index=1, size=:creditcard
-    @generator  = generator
+    super generator, card_title, first_card_index
 
-    raise ArgumentError.new( @@ERROR_LONG_CODES ) if @generator.length > 16
-
-    @title      = card_title
     @font_size  = font_size
-    @card_index = first_card_index
     @size       = process_size size
-    @offset     = 0
-  end
-
-  def passcodes_per_line
-    @passcodes_per_line ||= ( (@@CHARS_PER_LINE+1) / (@generator.length + 1) ).to_i
-  end
-  
-  def next_code
-    code = @generator.passcode( @offset )
-    @offset += 1
-    code
-  end
-
-  def passcode row_col
-    raise ArgumentError.new( @@ERROR_BAD_ROW_COL % row_col ) unless row_col.size == 2
-    raise ArgumentError.new( @@ERROR_BAD_ROW_COL % row_col ) unless @@ROW_COL_PATTERN.match( row_col.split('').sort.join )
-
-    passcode *row_col.split('')
-  end
-
-  def passcode row col
-    col_offset = col.ord - @@FIRST_COLUMN.ord
-    row_offset = row - 1
-
-    @generator.passcode row_offset * passcodes_per_line + col_offset
   end
 
   def css
