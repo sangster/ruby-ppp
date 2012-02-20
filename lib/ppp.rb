@@ -4,6 +4,7 @@ require "ppp/generator"
 require 'ppp/Cppp'
 require 'ppp/card/base'
 require 'ppp/card/html'
+require 'ppp/card/plain'
 
 module Ppp
   class << self
@@ -11,8 +12,8 @@ module Ppp
                       :aggressive   => '!"#$%&\'()*+,-./23456789:;<=>?@ABCDEFGHJKLMNOPRSTUVWXYZ[\]^_abcdefghijkmnopqrstuvwxyz{|}~' }
 
     # @return [Ppp::Generator] with the given SHA-256 key
-    def new key, length=4, alphabet=@@ALPHABETS[:conservative]
-      Generator.new key, length, alphabet
+    def code_generator key, opts
+      Generator.new key, opts
     end
 
     # @return a SHA-256 digest of the given string
@@ -25,11 +26,16 @@ module Ppp
       Cppp.random_key
     end
 
-    def printer style, ppp
+    def printer style, *args
       case style
-      when :html  then return Card::Html.new  ppp
-      when :plain then return Card::Plain.new ppp
+      when :html  then return Card::Html.new  *args
+      when :plain then return Card::Plain.new *args
       end
+      raise ArgumentError.new( "%s is not a valid printer style." % style )
+    end
+
+    def default_alphabets
+      @@ALPHABETS
     end
   end
 end

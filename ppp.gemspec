@@ -29,11 +29,4 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib", "ext"]
   s.files         = %w{ LICENSE lib/ppp.rb } + Dir.glob( 'lib/ppp/*.rb' ) + Dir.glob( 'lib/ppp/card/*.rb' ) + Dir.glob( 'ext/**/*.{c,h,rb}' )
   s.extensions    = [ 'ext/ppp/extconf.rb' ]
-  #s.files         = `git ls-files`.split("\n")
-  #s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  #s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-
-  # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
 end

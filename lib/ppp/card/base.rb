@@ -9,18 +9,23 @@ module Ppp
 
       @@ERROR_BAD_ROW_COL = %[Expected a string with exactly one digit and one letter, got "%s".]
       @@ERROR_LONG_CODES  = %[Passcodes longer than 16 characters are too long for printing]
-      def initialize generator, card_title="PPP Passcard", first_card_index=1
+
+      def initialize generator, opts={}
         @generator = generator
+        raise ArgumentError.new( @@ERROR_LONG_CODES ) if code_length > 16
 
-        raise ArgumentError.new( @@ERROR_LONG_CODES ) if @generator.length > 16
-
-        @title      = card_title
-        @card_index = first_card_index
+        options = { :card_title => 'PPP Passcard', :first_card_index => 1 }.merge opts
+        @title      = options[ :card_title       ]
+        @card_index = options[ :first_card_index ]
         @offset     = 0
       end
 
+      def code_length
+        @generator.length
+      end
+
       def passcodes_per_line
-        @passcodes_per_line ||= ( (@@CHARS_PER_LINE+1) / (@generator.length + 1) ).to_i
+        @passcodes_per_line ||= ( (@@CHARS_PER_LINE+1) / (code_length + 1) ).to_i
       end
 
       def next_code

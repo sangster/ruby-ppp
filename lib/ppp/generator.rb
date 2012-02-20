@@ -2,7 +2,6 @@ require 'ppp/Cppp'
 
 # Generates passcodes.
 class Ppp::Generator
-
   attr_reader :seed, :length, :alphabet
 
   @@HEX_PATTERN = /[a-fA-F0-9]{64}/
@@ -13,13 +12,16 @@ class Ppp::Generator
   # @param [String] alphabet a string containing the characters passcodes will
   #   be comprised of. Cannot contain null characters and duplicate characters
   #   will be removed.
-  def initialize sha256_key, length, alphabet
+  def initialize sha256_key, opts={}
     raise NotHexKey.new( sha256_key ) if @@HEX_PATTERN.match( sha256_key ).nil?
-    raise ArgumentError.new( "alphabet cannot contain null character" ) if alphabet.include? ?\0
 
     @seed     = sha256_key
-    @length   = length
-    @alphabet = alphabet.split( '' ).uniq.join
+
+    options   = { :length => 4, :alphabet => :conservative }.merge opts
+    @length   = options[ :length ]
+    @alphabet = process_alphabet( options[ :alphabet ] ).split( '' ).uniq.join
+
+    raise ArgumentError.new( "alphabet cannot contain null character" ) if alphabet.include? ?\0
   end
 
   # Creates passcodes seeded off the SHA-256 key this object was created with.
@@ -44,9 +46,24 @@ class Ppp::Generator
     passcode( index ) == given_passcode
   end
 
+  private
+
+  def process_alphabet alphabet
+    case alphabet
+    when Symbol
+      return Ppp.default_alphabets[ alphabet ] if Ppp.default_alphabets.include? alphabet
+      raise ArgumentError.new( %[No alphabet for for symbol "#{alphabet}"] )
+    when String
+      return alphabet
+    else
+    raise ArgumentError.new( "Alphabet must be a Symbol or String" )
+    end
+  end
+
   class NotHexKey < ArgumentError
     @@error = 'Expected a 64 digit hex-string, but got "%s". Use Ppp.key_from_string() to generate a useable hex-string from an arbitrary string.'
     def initialize( key ) @key = key     end
+
     def to_s()            @@error % @key end
   end
 end

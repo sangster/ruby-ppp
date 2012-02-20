@@ -4,11 +4,12 @@ require 'ppp/card/base'
 class Ppp::Card::Html < Ppp::Card::Base
   @@SIZES = {:creditcard => %w[ 85.60mm 53.98mm ]}
 
-  def initialize generator, card_title="PPP Passcard", font_size=14, first_card_index=1, size=:creditcard
-    super generator, card_title, first_card_index
+  def initialize generator, opts={}
+    super
 
-    @font_size  = font_size
-    @size       = process_size size
+    options    = { :font_size => 14, :size => :creditcard }.merge opts
+    @font_size = options[ :font_size ]
+    @size      = process_size options[ :size ]
   end
 
   def css
@@ -47,7 +48,7 @@ class Ppp::Card::Html < Ppp::Card::Base
 
         .codes_heading th {
           text-align: center;
-          width: #{@generator.length}em;
+          width: #{code_length}em;
           border-bottom: 1px solid \#aaa;
           background-color: \#eee;
         }
