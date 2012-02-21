@@ -12,7 +12,6 @@ void Init_Cppp()
 {
     cPpp = rb_define_class( "Cppp", rb_cObject );
     rb_define_module_function( cPpp, "random_key", t_random_key, 0 );
-    rb_define_module_function( cPpp, "key_from_string", t_key_from_string, 1 );
     rb_define_module_function( cPpp, "passcodes", t_get_passcodes, 5 );
 }
 
@@ -35,14 +34,6 @@ static VALUE t_random_key( VALUE self )
 {
     SequenceKey key;
     GenerateRandomSequenceKey( &key );
-    return key_to_string( &key );
-}
-
-static VALUE t_key_from_string( VALUE self, VALUE str )
-{
-    SequenceKey key;
-
-    GenerateSequenceKeyFromString( StringValueCStr( str ), &key );
     return key_to_string( &key );
 }
 
