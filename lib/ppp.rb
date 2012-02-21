@@ -13,7 +13,7 @@ module Ppp
                       :aggressive   => '!"#$%&\'()*+,-./23456789:;<=>?@ABCDEFGHJKLMNOPRSTUVWXYZ[\]^_abcdefghijkmnopqrstuvwxyz{|}~' }
 
     # @return [Ppp::Generator] with the given SHA-256 key
-    def code_generator key, opts
+    def code_generator key, opts={}
       Generator.new key, opts
     end
 
