@@ -7,10 +7,11 @@ module Ppp
 
       @@CHARS_PER_LINE = 34
       @@FIRST_COLUMN = ?A
-      @@ROW_COL_PATTERN = /[[:digit:]][[:alpha:]]/
+      @@ROW_COL_PATTERN = /([[:digit:]]+)([[:alpha:]])/
 
-      @@ERROR_BAD_ROW_COL = %[Expected a string with exactly one digit and one letter, got "%s".]
-      @@ERROR_LONG_CODES  = %[Passcodes longer than 16 characters are too long for printing]
+      @@ERROR_BAD_ROW_COL    = %[Expected a string with exactly one integer followed by one letter, got "%s"]
+      @@ERROR_LONG_CODES     = %[Passcodes longer than 16 characters are too long for printing]
+      @@ERROR_WRONG_NUM_ARGS = %[Wrong number of arguments. Expected %s, got %d]
 
       def initialize generator, opts={}
         @generator = generator
@@ -46,21 +47,37 @@ module Ppp
         (1..row_count).collect do |row|
           card_offset = (card_number-1) * passcodes_per_card
           offset = card_offset + ((row-1) * passcodes_per_line)
-          puts "offset: #{offset}"
-          @generator.passcodes( offset, passcodes_per_line )
+
+          @generator.passcodes offset, passcodes_per_line
         end
       end
 
-      def passcode row_col
-        raise ArgumentError.new( @@ERROR_BAD_ROW_COL % row_col ) unless row_col.size == 2 && @@ROW_COL_PATTERN.match( row_col.split('').sort.join )
-        passcode *row_col.split('')
-      end
+      def passcode *args
+        case args.size
+        when 1
+          match = @@ROW_COL_PATTERN.match( args.first )
+          raise ArgumentError.new( @@ERROR_BAD_ROW_COL % args.first ) unless match
+          row = match[1]
+          col = match[2]
+        when 2
+          (row, col) = args
+        else
+          raise ArgumentError.new( @@ERROR_WRONG_NUM_ARGS % ['1 or 2', args.size] )
+        end
 
-      def passcode row, col
         col_offset = col.ord - @@FIRST_COLUMN.ord
-        row_offset = row - 1
+        row_offset = row.to_i - 1
 
         @generator.passcode row_offset * passcodes_per_line + col_offset
+      end
+
+      def verify *args
+        given_code = args.pop
+        given_code == passcode( *args )
+      end
+
+      def row_label row_number
+        "#{row_number + 1}:"
       end
 
       def column_label column_number

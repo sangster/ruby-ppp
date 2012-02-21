@@ -71,7 +71,7 @@ class Ppp::Card::Plain < Ppp::Card::Base
   end
 
   def first_column row_index
-    label = "#{row_index}:"
+    label = row_label row_index
     padding = ' ' * (first_column_width - label.size)
     padding + label
   end
