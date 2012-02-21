@@ -1,3 +1,3 @@
 module Ppp
-  VERSION = '0.1.6.alpha'
+  VERSION = '1.0.0'
 end
