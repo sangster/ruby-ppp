@@ -8,10 +8,10 @@ class Ppp::Generator
 
   # @param [String] sha256_key a 64 hex-digit string representation of a
   #   SHA-256 hash. This hash will seed all the generated passcodes.
-  # @param [Fixnum] length the number of characters in each generated passcode
-  # @param [String] alphabet a string containing the characters passcodes will
-  #   be comprised of. Cannot contain null characters and duplicate characters
-  #   will be removed.
+  # @param [Hash] opts the options to create the generator with.
+  # @option opts [Fixnum] :length (4) the number of characters in each generated passcode
+  # @option opts [String] :alphabet (:conservative) a string containing the characters passcodes will
+  #   be comprised of. Cannot contain null characters and duplicate characters will be removed.
   def initialize sha256_key, opts={}
     raise NotHexKey.new( sha256_key ) if @@HEX_PATTERN.match( sha256_key ).nil?
 
