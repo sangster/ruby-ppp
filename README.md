@@ -28,6 +28,9 @@ Usage
 
 
 ### Code Generator ###
+- - - - - - - - -
+**Note:** See the "Cards" section below for a more convenient interface!
+- - - - - - - - -
 
 The only required object to begin generating one-time passcodes is `Ppp::Generator`. A generator can be created with:
 
@@ -67,9 +70,9 @@ You can provide any seed you want when creating a generator, but there are two h
 
 Generators have two optional parameters:
 
-- `:length`   The number of characters in each generated passcode.
+- `:length`   The number of characters in each generated passcode. Default: `4`
 - `:alphabet` Either a `Symbol` matching a pre-defined alphabet (See `Ppp.default_alphabets`) or a `String`. The
-  alphabet lists the characters in which generated passcodes will be comprised of.
+  alphabet lists the characters in which generated passcodes will be comprised of. Default: `:conservative`
 
 ##### Example #####
     cg = Ppp.code_generator Ppp.key_from_string('test'), :length => 8, :alphabet => 'abc123'
@@ -78,4 +81,69 @@ Generators have two optional parameters:
 
 ### Cards ###
 
-a
+Generating lists of one-time passcodes is all well and fine, but the goal here is to print out "cards" of passcodes
+which can be held on your person. In your wallet for example.
+
+Currently there are three types of cards you can choose from (hopefully PDFs to be added soon): 
+
+- Plain text (`:plain`)
+- HTML (`:html`)
+- XML (`:xml`)
+
+To create a card, all you need is the type of card and a `Generator`:
+
+    generator = Ppp.code_generator Ppp.key_from_string( 'hi' )
+    card      = Ppp.printer :plain, generator
+    card.to_s # => |----------------------------------------|
+                   | PPP Passcard                       [1] |
+                   |----+----+----+----+----+----+----+-----|
+                   |      A    B    C    D    E    F    G   |
+                   |  1: xvL3 =6rA J!dc ji36 Mm!H XF#W Z6cv |
+                   |  2: FhdA wiu3 v#iJ FkZB WFwm LR?= coza |
+                   |  3: CFtT !qWB vyTM vL@V q#PH Cf=a H5y% |
+                   |  4: c8Bq C!7q MZkL aN4k W=Xq 7CGr DnJv |
+                   |  5: 54#@ 5ei+ 6EKB 5Y:# ?+vY e4K2 3Dh6 |
+                   |  6: rTxM jmt4 Hcxj vyTG ZX@f FBHg D+aY |
+                   |  7: 42Fp euUu G!f! c5Wy 4nbV Ff9r 5MSc |
+                   |  8: a4em ?#MM =B4: Nxme 26!G 7%7F Cv9m |
+                   |  9: 2kpA FVDF LMmo Ts8e Fe+j n!ox %:Ym |
+                   | 10: t3nh vepZ MhJq :Ps3 +Fph vxz# X=FV |
+                   |----+----+----+----+----+----+----+-----|
+
+You can get the passcode for a given cell in the card using one of the following:
+
+    card.passcode 10, 'B' # => "vepZ"
+    card.passcode '10B' # => "vepZ"
+
+Or verify a given passcode with one of the following:
+
+    card.verify 10, 'B', 'wrong pass' # => false
+    card.verify '10B', 'vepZ' # => true
+
+In the top-right corner of the above example card, you can see the card number: `[1]`. Once all the codes have been used
+up from a card, you can just print out another one:
+
+    card.card_number = 2
+    card.to_s # => |----------------------------------------|
+                   | PPP Passcard                       [2] |
+                   |----+----+----+----+----+----+----+-----|
+                   |      A    B    C    D    E    F    G   |
+                   |  1: d=d% rBgr TL+d Nk42 8B8G b:5N F?8S |
+                   |  2: BqUf nayC unhH oipF 5sHy %:k2 FEeC |
+                   |  3: %P#n NNDM wPmg 9N#Y EWr2 5e7j 4rN# |
+                   |  4: 7N=5 7y2d bK!b PRHr :VEk hp!G 9dah |
+                   |  5: ovLN ReU? 2uon WD#P whPW iNzV WLq2 |
+                   |  6: f!Cc =%Bx iSTt 95MF d!6a %NCE ewnP |
+                   |  7: @jnE p27k NhKU dXFE caBF %!4H zhDR |
+                   |  8: yBVf ACox F7Wb u@kr CtFF uZSe MRtb |
+                   |  9: !%:6 oMRD LeRV eP#n iKKB Jxfy E5k8 |
+                   | 10: mJKG mYPd wi#K @:V3 6zen EFXJ 5dKA |
+                   |----+----+----+----+----+----+----+-----|
+
+#### Options ####
+
+Each type of card printer has its own optional parameters, but they all have the following:
+
+- `:card_title`        Some `String` to put at the head of each card. Default: `PPP Passcard`
+- `:row_count`         The number of rows to print on the card. Default: `10`
+- `:first_card_number` The number of the first card. Default: `1`
