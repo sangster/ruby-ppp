@@ -45,7 +45,6 @@ module Ppp
 
       def codes
         (1..row_count).collect do |row|
-          card_offset = (card_number-1) * passcodes_per_card
           offset = card_offset + ((row-1) * passcodes_per_line)
 
           @generator.passcodes offset, passcodes_per_line
@@ -68,7 +67,9 @@ module Ppp
         col_offset = col.ord - @@FIRST_COLUMN.ord
         row_offset = row.to_i - 1
 
-        @generator.passcode row_offset * passcodes_per_line + col_offset
+        offset = row_offset * passcodes_per_line + col_offset
+        offset = card_offset + offset
+        @generator.passcode offset
       end
 
       def verify *args
@@ -82,6 +83,12 @@ module Ppp
 
       def column_label column_number
         (@@FIRST_COLUMN.ord + (column_number - 1)).chr
+      end
+
+      protected
+
+      def card_offset
+        (card_number-1) * passcodes_per_card
       end
     end
   end
