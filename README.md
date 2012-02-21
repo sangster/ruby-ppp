@@ -93,7 +93,7 @@ Currently there are three types of cards you can choose from (hopefully PDFs to 
 To create a card, all you need is the type of card and a `Generator`:
 
     generator = Ppp.code_generator Ppp.key_from_string( 'hi' )
-    card      = Ppp.printer :plain, generator
+    card      = Ppp.card :plain, generator
     card.to_s # => |----------------------------------------|
                    | PPP Passcard                       [1] |
                    |----+----+----+----+----+----+----+-----|
@@ -142,7 +142,7 @@ up from a card, you can just print out another one:
 
 #### Options ####
 
-Each type of card printer has its own optional parameters, but they all have the following:
+Each type of card has its own optional parameters, but they all have the following:
 
 - `:card_title`        Some `String` to put at the head of each card. Default: `PPP Passcard`
 - `:row_count`         The number of rows to print on the card. Default: `10`
