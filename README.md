@@ -18,11 +18,6 @@ C, released under the BSD license.
 
 This gem is a ruby interface to that C implementation.
 
-Warning!
---------
-
-This gem is still in alpha, so it may not even work at all. **Use at your own risk!**
-
 Usage
 -----
 
