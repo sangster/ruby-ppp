@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Ppp::VERSION
   s.authors     = ["Jon Sangster"]
   s.email       = ["jon@ertt.ca"]
-  s.homepage    = "http://ertt.ca/"
+  s.homepage    = 'https://github.com/sangster/ruby-ppp#readme'
   s.summary     = %q{Ruby bindings for John Graham-Cumming's implementation of GRC's Perfect Paper Passwords}
   s.description = "Ruby-PPP is a Ruby language binding of PPP (Perfect Paper Passwords). " +
                   "PPP is a library designed to create one-time passwords, described at http://grc.com/ppp.htm"
