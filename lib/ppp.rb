@@ -30,7 +30,7 @@ module Ppp
 
     # @param [Symbol] type the type of card to return
     # @param [Array] args parameters to pass to the card's constructor
-    # @return a [Card] of the given type
+    # @return a +Card+ of the given type
     def card type, *args
       case type
       when :html  then return Card::Html.new  *args

@@ -147,3 +147,9 @@ Each type of card has its own optional parameters, but they all have the followi
 - `:card_title`        Some `String` to put at the head of each card. Default: `PPP Passcard`
 - `:row_count`         The number of rows to print on the card. Default: `10`
 - `:first_card_number` The number of the first card. Default: `1`
+
+#### Security ####
+
+Make sure that your passcode cards do not fall into the wrong hands. If you plan to provide these cards to others (say,
+the users of your website), make sure that you send them to them over a secure channel, such as HTTPS or encrypted
+email.

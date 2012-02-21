@@ -107,6 +107,10 @@ module Ppp
         given_code == passcode( *args )
       end
 
+      def to_s
+        raise "unimplemented"
+      end
+
       protected
 
       def row_label row_index
