@@ -15,10 +15,6 @@ class Ppp::Card::Plain < Ppp::Card::Base
     line( split_bar )
   end
 
-  def card_number= number
-    super
-  end
-
   private
 
   def bar
