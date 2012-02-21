@@ -39,7 +39,7 @@ class Ppp::Card::Plain < Ppp::Card::Base
   end
 
   def header_cells
-    cells = passcodes_per_line.times.collect { |i| (@@FIRST_COLUMN.ord + i).chr.center code_length }
+    cells = passcodes_per_line.times.collect { |i| column_label(i+1).center code_length }
 
     [' ' * first_column_width ] + cells
   end

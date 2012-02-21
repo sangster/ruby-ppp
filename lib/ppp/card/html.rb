@@ -94,7 +94,7 @@ class Ppp::Card::Html < Ppp::Card::Base
         <colgroup span="#{passcodes_per_line}">
         <thead class="codes_heading">
           <th>&nbsp;</th>
-          #{ (0..passcodes_per_line-1).collect { |i| %[<th>#{(@@FIRST_COLUMN.ord + i).chr}</th>] }.join ?\n }
+          #{ passcodes_per_line.times.collect { |i| %[<th>#{column_label(i+1)}</th>] }.join ?\n }
         </thead>
         <tbody class="codes">
           #{rows}

@@ -62,6 +62,10 @@ module Ppp
 
         @generator.passcode row_offset * passcodes_per_line + col_offset
       end
+
+      def column_label column_number
+        (@@FIRST_COLUMN.ord + (column_number - 1)).chr
+      end
     end
   end
 end

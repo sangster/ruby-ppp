@@ -4,6 +4,7 @@ require "ppp/generator"
 require 'ppp/Cppp'
 require 'ppp/card/base'
 require 'ppp/card/html'
+require 'ppp/card/xml'
 require 'ppp/card/plain'
 
 module Ppp
@@ -29,6 +30,7 @@ module Ppp
     def printer style, *args
       case style
       when :html  then return Card::Html.new  *args
+      when :xml   then return Card::Xml.new   *args
       when :plain then return Card::Plain.new *args
       end
       raise ArgumentError.new( "%s is not a valid printer style." % style )
