@@ -15,7 +15,7 @@ class Ppp::Card::Html < Ppp::Card::Base
   def css
     %[
       <style>
-        .card, .card .title, .card .card_index, .card .codes, .card .codes td {
+        .card, .card .title, .card .card_number, .card .codes, .card .codes td {
           font-family: monospace;
           font-size: 3.5mm;
         }
@@ -39,12 +39,12 @@ class Ppp::Card::Html < Ppp::Card::Base
         .title td:first-child {
           width: 2.5em;
         }
-        .card_index {
+        .card_number {
           float: right;
           margin-right: 1ex;
         }
-        .card_index:before { content: '['; }
-        .card_index:after  { content: ']'; }
+        .card_number:before { content: '['; }
+        .card_number:after  { content: ']'; }
 
         .codes_heading th {
           text-align: center;
@@ -79,11 +79,16 @@ class Ppp::Card::Html < Ppp::Card::Base
   end
 
   def html
+    rows = codes.each_with_index.collect do |row, i|
+      cols = row.collect { |code| "  <td>#{code}</td>" }.join(?\n)
+      "<tr>\n  <td>#{i+1}:</td>\n#{cols}</tr>"
+    end.join(?\n)
+
     %[
       <table class="card">
         <caption class="title">
           #{@title}
-          <span class="card_index">#{@card_index}</span>
+          <span class="card_number">#{card_number}</span>
         </caption>
         <colgroup span="1">
         <colgroup span="#{passcodes_per_line}">
@@ -92,7 +97,7 @@ class Ppp::Card::Html < Ppp::Card::Base
           #{ (0..passcodes_per_line-1).collect { |i| %[<th>#{(@@FIRST_COLUMN.ord + i).chr}</th>] }.join ?\n }
         </thead>
         <tbody class="codes">
-          #{ (1..9).collect { |i| "<tr><td>#{i}</td>#{(1..passcodes_per_line).collect {%[<td>#{next_code}</td>]}.join(?\n) }</tr>" }.join(?\n) }
+          #{rows}
         </tbody>
       </table>
     ]
